@@ -1,0 +1,49 @@
+# docker-compose.yml
+# Defines the services for the "myself" project.
+
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: myself_db
+    restart: always
+    environment:
+      POSTGRES_USER: myself_user
+      POSTGRES_PASSWORD: your_secure_password
+      POSTGRES_DB: myself_dwh
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./data/ddl:/docker-entrypoint-initdb.d
+      - ./data/backups:/backups
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myself_user -d myself_dwh"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: myself_api
+    working_dir: /app
+    environment:
+      - TZ=America/Mexico_City
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/app/src
+      - ./output:/app/output
+      - ./data:/app/data
+      - ./:/app/root_project # Mount the root to access conversations.json
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+    name: myself_postgres_data
+

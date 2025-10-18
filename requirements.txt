@@ -1,0 +1,17 @@
+# requirements.txt
+
+# For the web API framework
+
+fastapi
+
+# For the ASGI server that runs FastAPI
+uvicorn[standard]
+
+# For connecting to the PostgreSQL database
+psycopg2-binary
+
+# For interacting with the Gemini API
+google-generativeai
+
+# For YAML config support
+pyyaml

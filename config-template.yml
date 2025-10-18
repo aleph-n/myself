@@ -1,0 +1,36 @@
+# Configuration template for journal processing pipeline
+# Copy to config.yml and fill in values as needed
+
+# Output directory for enriched results
+output_dir: ./output
+
+# Journal directory (markdown files)
+journal_dir: ./data/journal
+
+# Supported enrichment models
+models:
+  gemini:
+    enabled: true
+    api_key: "YOUR_GEMINI_API_KEY"
+    model_name: "gemini-2.5-pro"
+  openai:
+    enabled: false
+    api_key: "YOUR_OPENAI_API_KEY"
+    model_name: "gpt-4o"
+
+# Default model to use for enrichment
+default_model: gemini
+
+# Output format: csv, json, db
+output_format: csv
+
+# DWH connection (for db output)
+dwh:
+  host: "localhost"
+  port: 5432
+  user: "postgres"
+  password: "password"
+  database: "myself"
+
+# Logging level
+logging: INFO
